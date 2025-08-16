@@ -17,9 +17,6 @@ class DeepgramServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('deepgram-laravel')
-            ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_deepgram_laravel_table')
-            ->hasCommand(DeepgramCommand::class);
+            ->hasConfigFile();
     }
 }
