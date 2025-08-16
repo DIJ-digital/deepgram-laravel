@@ -7,6 +7,8 @@ namespace DIJ\Deepgram\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
+ * @method static array transcribeFile(string $absoluteFilePath, string $mimeType = 'audio/wav')
+ *
  * @see \DIJ\Deepgram\Deepgram
  */
 final class Deepgram extends Facade

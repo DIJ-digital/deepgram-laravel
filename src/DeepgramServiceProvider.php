@@ -20,4 +20,11 @@ final class DeepgramServiceProvider extends PackageServiceProvider
             ->name('deepgram-laravel')
             ->hasConfigFile();
     }
+
+    public function packageRegistered(): void
+    {
+        $this->app->singleton(Deepgram::class, function () {
+            return new Deepgram();
+        });
+    }
 }
