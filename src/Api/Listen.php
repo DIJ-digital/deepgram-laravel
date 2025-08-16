@@ -15,6 +15,7 @@ final class Listen
      * Transcribe audio file using Deepgram /v1/listen API
      *
      * @param array<string, mixed> $options
+     * @return array<string, mixed>
      *
      * @throws DeepgramConfigurationException
      * @throws UnableToReadFile
