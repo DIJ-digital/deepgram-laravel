@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DIJ\Deepgram\Tests;
 
 use DIJ\Deepgram\DeepgramServiceProvider;
@@ -13,7 +15,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName): string => 'DIJ\\Deepgram\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName): string => 'DIJ\\Deepgram\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
     }
 

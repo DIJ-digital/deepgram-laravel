@@ -48,7 +48,7 @@ This command runs:
 **Testing:**
 ```bash
 # Run the entire test suite
-composer test
+composer pest
 
 # Run tests with coverage
 composer test-coverage
@@ -57,7 +57,7 @@ composer test-coverage
 **Code Style:**
 ```bash
 # Fix code style issues
-composer format
+composer pint
 ```
 
 **Refactoring:**
@@ -123,7 +123,7 @@ DEEPGRAM_DEFAULT_LANGUAGE=en-US
 2. **Create a feature branch** from `main`
 3. **Write tests** for your changes following our testing patterns
 4. **Ensure all quality checks pass**: `composer qa`
-5. **Run the full test suite**: `composer test`
+5. **Run the full test suite**: `composer pest`
 6. **Check test coverage**: `composer test-coverage`
 7. **Commit** with a clear, descriptive message
 8. **Submit a pull request** with a detailed description

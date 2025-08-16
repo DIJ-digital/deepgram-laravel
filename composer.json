@@ -54,14 +54,14 @@
         "rector": [
             "@php vendor/bin/rector process"
         ],
-        "test": "vendor/bin/pest",
+        "pest": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest --coverage",
-        "format": "vendor/bin/pint",
+        "pint": "@php vendor/bin/pint --config https://raw.githubusercontent.com/DIJ-digital/pint-config/main/pint.json",
         "qa": [
             "@rector",
-            "@format",
+            "@pint",
             "@analyse",
-            "@test"
+            "@pest"
         ]
     },
     "config": {
