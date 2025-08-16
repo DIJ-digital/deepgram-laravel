@@ -2,9 +2,9 @@
 
 namespace DIJ\Deepgram;
 
+use DIJ\Deepgram\Commands\DeepgramCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use DIJ\Deepgram\Commands\DeepgramCommand;
 
 class DeepgramServiceProvider extends PackageServiceProvider
 {

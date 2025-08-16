@@ -2,9 +2,9 @@
 
 namespace DIJ\Deepgram\Tests;
 
+use DIJ\Deepgram\DeepgramServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use DIJ\Deepgram\DeepgramServiceProvider;
 
 class TestCase extends Orchestra
 {
