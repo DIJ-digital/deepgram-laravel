@@ -6,16 +6,13 @@ namespace DIJ\Deepgram\Fakes;
 
 class FakeListen
 {
-    /** @var array<int, array<string, mixed>> */
-    protected array $transcriptions = [];
-
     /**
      * @param array<string, mixed> $options
      * @return array<string, mixed>
      */
     public function transcribeFile(string $absoluteFilePath, string $mimeType = 'audio/wav', array $options = []): array
     {
-        $fakeResponse = [
+        return [
             'metadata' => [
                 'transaction_key' => 'fake-transaction-' . uniqid(),
                 'request_id' => 'fake-request-' . uniqid(),
@@ -45,27 +42,5 @@ class FakeListen
                 ],
             ],
         ];
-
-        $this->transcriptions[] = [
-            'file_path' => $absoluteFilePath,
-            'mime_type' => $mimeType,
-            'options' => $options,
-            'response' => $fakeResponse,
-        ];
-
-        return $fakeResponse;
-    }
-
-    /**
-     * @return array<int, array<string, mixed>>
-     */
-    public function getTranscriptions(): array
-    {
-        return $this->transcriptions;
-    }
-
-    public function clearTranscriptions(): void
-    {
-        $this->transcriptions = [];
     }
 }
