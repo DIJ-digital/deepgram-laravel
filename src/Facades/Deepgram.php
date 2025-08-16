@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Facade;
  * @method static Listen listen()
  * @method static Speak speak()
  * @method static Read read()
- * @method static void fake()
  *
  * @see \DIJ\Deepgram\Deepgram
  */
@@ -25,9 +24,11 @@ final class Deepgram extends Facade
         return \DIJ\Deepgram\Deepgram::class;
     }
 
-    public static function fake(): void
+    public static function fake(): FakeDeepgram
     {
         $fake = new FakeDeepgram();
         self::swap($fake);
+
+        return $fake;
     }
 }

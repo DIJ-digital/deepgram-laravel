@@ -8,7 +8,7 @@ use DIJ\Deepgram\Api\Listen;
 use DIJ\Deepgram\Api\Read;
 use DIJ\Deepgram\Api\Speak;
 
-final class Deepgram
+class Deepgram
 {
     /**
      * Access the Listen API for Speech-to-Text functionality

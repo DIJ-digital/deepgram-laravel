@@ -9,7 +9,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use League\Flysystem\UnableToReadFile;
 
-final class Listen
+class Listen
 {
     /**
      * Transcribe audio file using Deepgram /v1/listen API
