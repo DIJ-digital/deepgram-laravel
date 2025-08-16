@@ -114,7 +114,7 @@ For testing, create a `.env` file with:
 DEEPGRAM_API_KEY=test-key
 DEEPGRAM_BASE_URL=https://api.deepgram.com/v1
 DEEPGRAM_DEFAULT_MODEL=nova-2
-DEEPGRAM_DEFAULT_LANGUAGE=nl
+DEEPGRAM_DEFAULT_LANGUAGE=en-US
 ```
 
 ## Pull Request Process

@@ -28,7 +28,7 @@ Add your Deepgram API credentials to your `.env` file:
 DEEPGRAM_API_KEY=your-api-key-here
 DEEPGRAM_BASE_URL=https://api.deepgram.com/v1
 DEEPGRAM_DEFAULT_MODEL=nova-2
-DEEPGRAM_DEFAULT_LANGUAGE=nl
+DEEPGRAM_DEFAULT_LANGUAGE=en-US
 ```
 
 ### How to use this package

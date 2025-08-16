@@ -17,5 +17,5 @@ return [
     |--------------------------------------------------------------------------
     */
     'default_model' => env('DEEPGRAM_DEFAULT_MODEL', 'nova-2'),
-    'default_language' => env('DEEPGRAM_DEFAULT_LANGUAGE', 'nl'),
+    'default_language' => env('DEEPGRAM_DEFAULT_LANGUAGE', 'en-US'),
 ];

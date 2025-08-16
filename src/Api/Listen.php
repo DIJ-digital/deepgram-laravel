@@ -46,7 +46,7 @@ final class Listen
         // Merge config defaults with provided options
         $transcriptionOptions = array_merge([
             'model' => config('deepgram-laravel.default_model', 'nova-2'),
-            'language' => config('deepgram-laravel.default_language', 'nl'),
+            'language' => config('deepgram-laravel.default_language', 'en-US'),
         ], $options);
 
         $queryParams = http_build_query($transcriptionOptions);

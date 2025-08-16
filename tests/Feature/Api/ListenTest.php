@@ -17,7 +17,7 @@ beforeEach(function (): void {
         'deepgram-laravel.api_key' => 'test-api-key',
         'deepgram-laravel.base_url' => 'https://api.deepgram.com/v1',
         'deepgram-laravel.default_model' => 'nova-2',
-        'deepgram-laravel.default_language' => 'nl',
+        'deepgram-laravel.default_language' => 'en-US',
     ]);
 });
 
@@ -68,7 +68,7 @@ describe('Listen API', function (): void {
                     ->toBe(12.5);
 
                 // Verify HTTP request was made correctly
-                Http::assertSent(fn ($request): bool => $request->url() === 'https://api.deepgram.com/v1/listen?model=nova-2&language=nl'
+                Http::assertSent(fn ($request): bool => $request->url() === 'https://api.deepgram.com/v1/listen?model=nova-2&language=en-US'
                     && $request->header('Authorization')[0] === 'Token test-api-key'
                     && $request->header('Content-Type')[0] === 'audio/wav');
             });
