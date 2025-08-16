@@ -7,7 +7,7 @@ This package provides a seamless integration with [Deepgram's](https://deepgram.
 - Transcribe local audio files
 - Configurable transcription options (model, language, smart formatting)
 
-> **Requires [PHP 8.3](https://php.net/releases/) or higher and Laravel 11+**
+> **Requires [PHP 8.3](https://php.net/releases/) or higher and Laravel 12+**
 
 ⚡️ Install the package using **Composer**:
 ```bash  
