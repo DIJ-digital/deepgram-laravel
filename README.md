@@ -38,10 +38,10 @@ DEEPGRAM_DEFAULT_LANGUAGE=nl
 use DIJ\Deepgram\Facades\Deepgram;
 
 // Basic transcription with config defaults
-$result = Deepgram::transcribeFile('/path/to/audio.wav', 'audio/wav');
+$result = Deepgram::listen()->transcribeFile('/path/to/audio.wav', 'audio/wav');
 
 // With custom options per call
-$result = Deepgram::transcribeFile('/path/to/audio.wav', 'audio/wav', [
+$result = Deepgram::listen()->transcribeFile('/path/to/audio.wav', 'audio/wav', [
     'model' => 'nova-3',
     'language' => 'en',
     'smart_format' => true,

@@ -4,61 +4,33 @@ declare(strict_types=1);
 
 namespace DIJ\Deepgram;
 
-use DIJ\Deepgram\Exceptions\DeepgramConfigurationException;
-use Illuminate\Http\Client\RequestException;
-use Illuminate\Support\Facades\Http;
-use League\Flysystem\UnableToReadFile;
+use DIJ\Deepgram\Api\Listen;
+use DIJ\Deepgram\Api\Read;
+use DIJ\Deepgram\Api\Speak;
 
 final class Deepgram
 {
     /**
-     * Transcribe audio file using Deepgram API
-     *
-     * @param  array<string, mixed>  $options
-     *
-     * @throws DeepgramConfigurationException
-     * @throws UnableToReadFile
-     * @throws RequestException
+     * Access the Listen API for Speech-to-Text functionality
      */
-    public function transcribeFile(string $absoluteFilePath, string $mimeType = 'audio/wav', array $options = []): array
+    public function listen(): Listen
     {
-        $apiKey = config('deepgram-laravel.api_key');
-        $baseUrl = mb_rtrim((string) config('deepgram-laravel.base_url'), '/');
+        return new Listen();
+    }
 
-        if ($apiKey === null || $apiKey === '') {
-            throw new DeepgramConfigurationException('Deepgram API key is not properly configured');
-        }
+    /**
+     * Access the Speak API for Text-to-Speech functionality
+     */
+    public function speak(): Speak
+    {
+        return new Speak();
+    }
 
-        if ($baseUrl === '') {
-            throw new DeepgramConfigurationException('Deepgram base URL is not properly configured');
-        }
-
-        if (! is_readable(filename: $absoluteFilePath)) {
-            throw new UnableToReadFile('Audio file not readable: '.$absoluteFilePath);
-        }
-
-        $stream = fopen(filename: $absoluteFilePath, mode: 'rb');
-
-        if ($stream === false) {
-            throw new UnableToReadFile('Failed to open audio file for reading: '.$absoluteFilePath);
-        }
-
-        // Merge config defaults with provided options
-        $transcriptionOptions = array_merge([
-            'model' => config('deepgram-laravel.default_model', 'nova-2'),
-            'language' => config('deepgram-laravel.default_language', 'nl'),
-        ], $options);
-
-        $queryParams = http_build_query($transcriptionOptions);
-
-        $response = Http::withHeaders([
-            'Authorization' => 'Token '.$apiKey,
-            'Content-Type' => $mimeType,
-        ])->withBody(stream_get_contents($stream) ?: '', $mimeType)
-            ->post($baseUrl.'/listen?'.$queryParams);
-
-        fclose($stream);
-
-        return $response->throw()->json();
+    /**
+     * Access the Read API for Text Intelligence functionality
+     */
+    public function read(): Read
+    {
+        return new Read();
     }
 }

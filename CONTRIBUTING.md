@@ -91,22 +91,19 @@ This project follows:
 
 This package follows Laravel package development best practices:
 - Uses **Spatie Package Tools** for service provider setup
+- **API structure**: `src/Api/` for Listen, Speak, Read endpoints
 - Config files use package name: `config/deepgram-laravel.php`
-- Facade pattern for easy Laravel integration
+- Facade pattern for easy Laravel integration: `Deepgram::listen()->transcribeFile()`
 - Proper exception handling with custom exceptions
 
 ## Testing
 
-All contributions must include tests. The project uses **Pest PHP** for testing with **describe/it** syntax.
-
-### Test Structure
-- `tests/Feature/Facades/` - Facade integration tests
-- `tests/` - Architecture and package tests
+All contributions must include tests. The project uses **Pest PHP** for testing.
 
 ### Writing Tests
 - Use `describe()` blocks to organize tests by functionality
 - Follow the **Arrange / Act / Assert** pattern
-- Extend `Tests\TestCase` for all tests
+- Tests are organized in `tests/Feature/Api/` by API endpoint (ListenTest.php, etc.)
 
 ## Configuration
 
@@ -144,17 +141,23 @@ All contributions will be reviewed for:
 ## Package Features
 
 Current features:
-- **File transcription** via `transcribeFile()` method
-- **Configurable options** per call
-- **HTTP client mocking** for testing
-- **Facade pattern** for Laravel integration
-- **Custom exceptions** for error handling
+- **Listen API** - `Deepgram::listen()->transcribeFile()` for Speech-to-Text
+- **Organized API structure** - `src/Api/Listen.php`, `src/Api/Speak.php`, `src/Api/Read.php`
 
-Future features (contributions welcome):
-- URL transcription support
-- Real-time streaming transcription
-- Text-to-speech capabilities
-- Batch processing
+Future API endpoints (contributions welcome):
+
+**🎧 `/v1/listen` - Speech-to-Text API:**
+- `transcribeUrl()` - transcribe remote audio files via URL
+- `transcribeFileAsync()` - async file transcription with callbacks  
+- `transcribeUrlAsync()` - async URL transcription with callbacks
+- WebSocket live transcription support
+
+**🗣️ `/v1/speak` - Text-to-Speech API:**
+- `speakToFile()` - convert text to speech and save to file
+- `speakStream()` - streaming TTS via WebSocket
+
+**📖 `/v1/read` - Text Intelligence API:**
+- `processText()` - process text for sentiment, topics, intents
 
 ## Questions?
 

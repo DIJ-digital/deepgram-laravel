@@ -14,7 +14,7 @@ final class DeepgramServiceProvider extends PackageServiceProvider
         /*
          * This class is a Package Service Provider
          *
-         * More info: https://github.com/spatie/laravel-package-tools
+         * More info: https://github.com/spatielaravel-package-tools
          */
         $package
             ->name('deepgram-laravel')
