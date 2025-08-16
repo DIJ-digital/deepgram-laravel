@@ -37,8 +37,17 @@ DEEPGRAM_DEFAULT_LANGUAGE=nl
 ```php
 use DIJ\Deepgram\Facades\Deepgram;
 
-// Transcribe an audio file
+// Basic transcription with config defaults
 $result = Deepgram::transcribeFile('/path/to/audio.wav', 'audio/wav');
+
+// With custom options per call
+$result = Deepgram::transcribeFile('/path/to/audio.wav', 'audio/wav', [
+    'model' => 'nova-3',
+    'language' => 'en',
+    'smart_format' => true,
+    'punctuate' => true,
+    'diarize' => true,
+]);
 ```
 
 ## Configuration Options
@@ -51,13 +60,7 @@ return [
     'base_url' => env('DEEPGRAM_BASE_URL', 'https://api.deepgram.com/v1'),
     'default_model' => env('DEEPGRAM_DEFAULT_MODEL', 'nova-2'),
     'default_language' => env('DEEPGRAM_DEFAULT_LANGUAGE', 'nl'),
-    'transcription' => [
-        'smart_format' => true,
-    ],
-    'max_file_size' => env('DEEPGRAM_MAX_FILE_SIZE', 150 * 1024 * 1024), // 150MB
-    'supported_formats' => [
-        'mp3', 'mp4', 'wav', 'flac', 'aac', 'ogg', 'webm', 'm4a',
-    ],
+
 ];
 ```
 

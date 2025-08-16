@@ -14,11 +14,13 @@ final class Deepgram
     /**
      * Transcribe audio file using Deepgram API
      *
+     * @param  array<string, mixed>  $options
+     *
      * @throws DeepgramConfigurationException
      * @throws UnableToReadFile
      * @throws RequestException
      */
-    public function transcribeFile(string $absoluteFilePath, string $mimeType = 'audio/wav'): array
+    public function transcribeFile(string $absoluteFilePath, string $mimeType = 'audio/wav', array $options = []): array
     {
         $apiKey = config('deepgram.api_key');
         $baseUrl = mb_rtrim((string) config('deepgram.base_url'), '/');
@@ -41,11 +43,13 @@ final class Deepgram
             throw new UnableToReadFile('Failed to open audio file for reading: '.$absoluteFilePath);
         }
 
-        $queryParams = http_build_query([
+        // Merge config defaults with provided options
+        $transcriptionOptions = array_merge([
             'model' => config('deepgram.default_model', 'nova-2'),
             'language' => config('deepgram.default_language', 'nl'),
-            'smart_format' => (bool) config('deepgram.transcription.smart_format', true),
-        ]);
+        ], $options);
+
+        $queryParams = http_build_query($transcriptionOptions);
 
         $response = Http::withHeaders([
             'Authorization' => 'Token '.$apiKey,

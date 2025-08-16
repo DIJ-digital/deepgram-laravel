@@ -7,7 +7,7 @@ namespace DIJ\Deepgram\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static array transcribeFile(string $absoluteFilePath, string $mimeType = 'audio/wav')
+ * @method static array transcribeFile(string $absoluteFilePath, string $mimeType = 'audio/wav', array $options = [])
  *
  * @see \DIJ\Deepgram\Deepgram
  */
