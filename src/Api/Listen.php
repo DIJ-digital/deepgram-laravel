@@ -50,13 +50,7 @@ final class Listen
         ], $options);
 
         // Convert boolean values to string 'true'/'false' for Deepgram API
-        $transcriptionOptions = array_map(function ($value) {
-            if (is_bool($value)) {
-                return $value ? 'true' : 'false';
-            }
-
-            return $value;
-        }, $transcriptionOptions);
+        $transcriptionOptions = $this->convertBooleansToStrings($transcriptionOptions);
 
         $queryParams = http_build_query($transcriptionOptions);
 
@@ -69,5 +63,24 @@ final class Listen
         fclose($stream);
 
         return $response->throw()->json();
+    }
+
+    /* -------------------- Helper methods -------------------- */
+
+    /**
+     * Convert boolean values to 'true'/'false' strings for Deepgram API compatibility
+     *
+     * @param  array<string, mixed>  $options
+     * @return array<string, mixed>
+     */
+    private function convertBooleansToStrings(array $options): array
+    {
+        return array_map(function ($value) {
+            if (is_bool($value)) {
+                return $value ? 'true' : 'false';
+            }
+
+            return $value;
+        }, $options);
     }
 }
