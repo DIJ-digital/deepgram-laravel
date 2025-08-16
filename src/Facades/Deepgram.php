@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DIJ\Deepgram\Facades;
 
 use Illuminate\Support\Facades\Facade;
@@ -7,7 +9,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @see \DIJ\Deepgram\Deepgram
  */
-class Deepgram extends Facade
+final class Deepgram extends Facade
 {
     protected static function getFacadeAccessor(): string
     {

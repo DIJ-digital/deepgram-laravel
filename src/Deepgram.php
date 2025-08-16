@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DIJ\Deepgram;
 
-class Deepgram {}
+final class Deepgram {}

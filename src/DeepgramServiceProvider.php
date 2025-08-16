@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DIJ\Deepgram;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class DeepgramServiceProvider extends PackageServiceProvider
+final class DeepgramServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
