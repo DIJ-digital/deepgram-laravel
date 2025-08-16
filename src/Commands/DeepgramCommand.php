@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace DIJ\Deepgram\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class DeepgramCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'deepgram-laravel';
 
     public $description = 'My command';
 
