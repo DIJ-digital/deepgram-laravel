@@ -1,84 +1,64 @@
-# A Laravel package for integrating Deepgram’s AI voice services
+## Deepgram Laravel - A Laravel Package for Deepgram AI Voice Services
+This package provides a seamless integration with [Deepgram's](https://deepgram.com) AI voice services. Built following Laravel conventions.
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/dij-digital/deepgram-laravel.svg?style=flat-square)](https://packagist.org/packages/dij-digital/deepgram-laravel)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/dij-digital/deepgram-laravel/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/dij-digital/deepgram-laravel/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/dij-digital/deepgram-laravel/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/dij-digital/deepgram-laravel/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/dij-digital/deepgram-laravel.svg?style=flat-square)](https://packagist.org/packages/dij-digital/deepgram-laravel)
+### This package supports the following features:
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+#### Speech-to-Text
+- Transcribe local audio files
+- Configurable transcription options (model, language, smart formatting)
 
-## Support us
+> **Requires [PHP 8.3](https://php.net/releases/) or higher and Laravel 11+**
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/deepgram-laravel.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/deepgram-laravel)
+⚡️ Install the package using **Composer**:
+```bash  
+composer require dij-digital/deepgram-laravel  
+```  
 
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
+## Configuration
 
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
-
-## Installation
-
-You can install the package via composer:
-
-```bash
-composer require dij-digital/deepgram-laravel
-```
-
-You can publish and run the migrations with:
+Publish the config file:
 
 ```bash
-php artisan vendor:publish --tag="deepgram-laravel-migrations"
-php artisan migrate
+php artisan vendor:publish --tag="deepgram-config"
 ```
 
-You can publish the config file with:
+Add your Deepgram API credentials to your `.env` file:
 
-```bash
-php artisan vendor:publish --tag="deepgram-laravel-config"
+```env
+DEEPGRAM_API_KEY=your-api-key-here
+DEEPGRAM_BASE_URL=https://api.deepgram.com/v1
+DEEPGRAM_DEFAULT_MODEL=nova-2
+DEEPGRAM_DEFAULT_LANGUAGE=nl
 ```
 
-This is the contents of the published config file:
+### How to use this package
+
+#### Basic File Transcription
+```php
+use DIJ\Deepgram\Facades\Deepgram;
+
+// Transcribe an audio file
+$result = Deepgram::transcribeFile('/path/to/audio.wav', 'audio/wav');
+```
+
+## Configuration Options
+
+The published config file (`config/deepgram.php`) contains the following options:
 
 ```php
 return [
+    'api_key' => env('DEEPGRAM_API_KEY'),
+    'base_url' => env('DEEPGRAM_BASE_URL', 'https://api.deepgram.com/v1'),
+    'default_model' => env('DEEPGRAM_DEFAULT_MODEL', 'nova-2'),
+    'default_language' => env('DEEPGRAM_DEFAULT_LANGUAGE', 'nl'),
+    'transcription' => [
+        'smart_format' => true,
+    ],
+    'max_file_size' => env('DEEPGRAM_MAX_FILE_SIZE', 150 * 1024 * 1024), // 150MB
+    'supported_formats' => [
+        'mp3', 'mp4', 'wav', 'flac', 'aac', 'ogg', 'webm', 'm4a',
+    ],
 ];
 ```
 
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="deepgram-laravel-views"
-```
-
-## Usage
-
-```php
-$deepgram = new DIJ\Deepgram();
-echo $deepgram->echoPhrase('Hello, DIJ Digital!');
-```
-
-## Testing
-
-```bash
-composer test
-```
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
-## Credits
-
-- [Jesse Bos](https://github.com/jesse-bos-dij)
-- [All Contributors](../../contributors)
-
-## License
-
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+**Deepgram Laravel** was created by **[DIJ Digital](https://dij.digital)** under the **[MIT license](https://opensource.org/licenses/MIT)**.
