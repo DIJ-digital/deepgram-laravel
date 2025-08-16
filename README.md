@@ -50,6 +50,32 @@ $result = Deepgram::listen()->transcribeFile('/path/to/audio.wav', 'audio/wav', 
 ]);
 ```
 
+## Testing
+
+This package includes a fake implementation for testing purposes, so you can test your application without making real API calls to Deepgram.
+
+### Using the Fake
+
+```php
+use DIJ\Deepgram\Facades\Deepgram;
+
+beforeEach(function () {
+    Deepgram::fake();
+});
+
+it('can process audio files', function () {
+    // Use Deepgram normally in your application code
+    Deepgram::listen()->transcribeFile('/path/to/audio.wav');
+
+    // Assert what happened directly on the facade
+    Deepgram::expectNumberOfTranscriptionsCalled(1);
+    
+    // Get raw data if you need specific details
+    $transcriptions = Deepgram::getTranscriptions();
+    expect($transcriptions[0]['file_path'])->toBe('/path/to/audio.wav');
+});
+```
+
 ## Configuration Options
 
 The published config file (`config/deepgram-laravel.php`) contains the following options:
