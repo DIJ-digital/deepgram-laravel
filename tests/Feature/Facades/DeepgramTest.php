@@ -9,21 +9,21 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\UnableToReadFile;
 
-beforeEach(function () {
+beforeEach(function (): void {
     // ARRANGE - Set up fake storage and config for each test
     Storage::fake('local');
 
     config([
-        'deepgram.api_key' => 'test-api-key',
-        'deepgram.base_url' => 'https://api.deepgram.com/v1',
-        'deepgram.default_model' => 'nova-2',
-        'deepgram.default_language' => 'nl',
+        'deepgram-laravel.api_key' => 'test-api-key',
+        'deepgram-laravel.base_url' => 'https://api.deepgram.com/v1',
+        'deepgram-laravel.default_model' => 'nova-2',
+        'deepgram-laravel.default_language' => 'nl',
     ]);
 });
 
-describe('transcribeFile', function () {
-    describe('success cases', function () {
-        it('can transcribe audio file with default config', function () {
+describe('transcribeFile', function (): void {
+    describe('success cases', function (): void {
+        it('can transcribe audio file with default config', function (): void {
             // ARRANGE
             Storage::put('test-audio.wav', 'fake-audio-content');
             $audioFile = Storage::path('test-audio.wav');
@@ -67,14 +67,12 @@ describe('transcribeFile', function () {
                 ->toBe(12.5);
 
             // Verify HTTP request was made correctly
-            Http::assertSent(function ($request) {
-                return $request->url() === 'https://api.deepgram.com/v1/listen?model=nova-2&language=nl'
-                    && $request->header('Authorization')[0] === 'Token test-api-key'
-                    && $request->header('Content-Type')[0] === 'audio/wav';
-            });
+            Http::assertSent(fn ($request): bool => $request->url() === 'https://api.deepgram.com/v1/listen?model=nova-2&language=nl'
+                && $request->header('Authorization')[0] === 'Token test-api-key'
+                && $request->header('Content-Type')[0] === 'audio/wav');
         });
 
-        it('can transcribe with custom options', function () {
+        it('can transcribe with custom options', function (): void {
             // ARRANGE
             Storage::put('custom-audio.wav', 'fake-audio-content');
             $audioFile = Storage::path('custom-audio.wav');
@@ -114,7 +112,7 @@ describe('transcribeFile', function () {
                 ->toBe('Custom transcription with diarization.');
 
             // Verify custom options were sent in query string
-            Http::assertSent(function ($request) {
+            Http::assertSent(function ($request): bool {
                 $url = $request->url();
 
                 return str_contains($url, 'model=nova-3')
@@ -125,7 +123,7 @@ describe('transcribeFile', function () {
             });
         });
 
-        it('handles different mime types correctly', function () {
+        it('handles different mime types correctly', function (): void {
             // ARRANGE
             Storage::put('mime-test.mp3', 'fake-mp3-content');
             $audioFile = Storage::path('mime-test.mp3');
@@ -155,16 +153,14 @@ describe('transcribeFile', function () {
             expect($result)->toBeArray();
 
             // Verify correct Content-Type header
-            Http::assertSent(function ($request) {
-                return $request->header('Content-Type')[0] === 'audio/mpeg';
-            });
+            Http::assertSent(fn ($request): bool => $request->header('Content-Type')[0] === 'audio/mpeg');
         });
     });
 
-    describe('error handling', function () {
-        it('throws configuration exception when api key is missing', function () {
+    describe('error handling', function (): void {
+        it('throws configuration exception when api key is missing', function (): void {
             // ARRANGE
-            config(['deepgram.api_key' => '']);
+            config(['deepgram-laravel.api_key' => '']);
             Storage::put('config-test.wav', 'fake-audio-content');
             $audioFile = Storage::path('config-test.wav');
 
@@ -173,9 +169,9 @@ describe('transcribeFile', function () {
                 ->toThrow(DeepgramConfigurationException::class, 'Deepgram API key is not properly configured');
         });
 
-        it('throws configuration exception when base url is empty', function () {
+        it('throws configuration exception when base url is empty', function (): void {
             // ARRANGE
-            config(['deepgram.base_url' => '']);
+            config(['deepgram-laravel.base_url' => '']);
             Storage::put('base-url-test.wav', 'fake-audio-content');
             $audioFile = Storage::path('base-url-test.wav');
 
@@ -184,7 +180,7 @@ describe('transcribeFile', function () {
                 ->toThrow(DeepgramConfigurationException::class, 'Deepgram base URL is not properly configured');
         });
 
-        it('throws exception when audio file is not readable', function () {
+        it('throws exception when audio file is not readable', function (): void {
             // ARRANGE
             $nonExistentFile = Storage::path('non-existent.wav'); // File doesn't exist in fake storage
 
@@ -193,7 +189,7 @@ describe('transcribeFile', function () {
                 ->toThrow(UnableToReadFile::class, 'Audio file not readable');
         });
 
-        it('throws request exception when api returns error', function () {
+        it('throws request exception when api returns error', function (): void {
             // ARRANGE
             Storage::put('error-test.wav', 'fake-audio-content');
             $audioFile = Storage::path('error-test.wav');
@@ -210,8 +206,8 @@ describe('transcribeFile', function () {
         });
     });
 
-    describe('options and configuration', function () {
-        it('merges options correctly with config defaults', function () {
+    describe('options and configuration', function (): void {
+        it('merges options correctly with config defaults', function (): void {
             // ARRANGE
             Storage::put('merge-test.wav', 'fake-audio-content');
             $audioFile = Storage::path('merge-test.wav');
@@ -244,7 +240,7 @@ describe('transcribeFile', function () {
             expect($result)->toBeArray();
 
             // Verify that config defaults are kept and options are merged
-            Http::assertSent(function ($request) {
+            Http::assertSent(function ($request): bool {
                 $url = $request->url();
 
                 return str_contains($url, 'model=nova-2') // from config

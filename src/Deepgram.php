@@ -22,8 +22,8 @@ final class Deepgram
      */
     public function transcribeFile(string $absoluteFilePath, string $mimeType = 'audio/wav', array $options = []): array
     {
-        $apiKey = config('deepgram.api_key');
-        $baseUrl = mb_rtrim((string) config('deepgram.base_url'), '/');
+        $apiKey = config('deepgram-laravel.api_key');
+        $baseUrl = mb_rtrim((string) config('deepgram-laravel.base_url'), '/');
 
         if ($apiKey === null || $apiKey === '') {
             throw new DeepgramConfigurationException('Deepgram API key is not properly configured');
@@ -45,8 +45,8 @@ final class Deepgram
 
         // Merge config defaults with provided options
         $transcriptionOptions = array_merge([
-            'model' => config('deepgram.default_model', 'nova-2'),
-            'language' => config('deepgram.default_language', 'nl'),
+            'model' => config('deepgram-laravel.default_model', 'nova-2'),
+            'language' => config('deepgram-laravel.default_language', 'nl'),
         ], $options);
 
         $queryParams = http_build_query($transcriptionOptions);

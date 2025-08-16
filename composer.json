@@ -51,6 +51,9 @@
         "analyse": [
             "@php vendor/bin/phpstan analyse --memory-limit=2G --no-progress --configuration=phpstan.neon.dist"
         ],
+        "rector": [
+            "@php vendor/bin/rector process"
+        ],
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest --coverage",
         "format": "vendor/bin/pint",

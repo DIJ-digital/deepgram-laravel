@@ -19,7 +19,7 @@ composer require dij-digital/deepgram-laravel
 Publish the config file:
 
 ```bash
-php artisan vendor:publish --tag="deepgram-config"
+php artisan vendor:publish --tag="deepgram-laravel-config"
 ```
 
 Add your Deepgram API credentials to your `.env` file:
@@ -52,7 +52,7 @@ $result = Deepgram::transcribeFile('/path/to/audio.wav', 'audio/wav', [
 
 ## Configuration Options
 
-The published config file (`config/deepgram.php`) contains the following options:
+The published config file (`config/deepgram-laravel.php`) contains the following options:
 
 ```php
 return [
