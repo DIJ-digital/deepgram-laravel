@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace DIJ\Deepgram;
 
 use DIJ\Deepgram\Exceptions\DeepgramConfigurationException;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
+use League\Flysystem\UnableToReadFile;
 
 final class Deepgram
 {
@@ -15,7 +15,7 @@ final class Deepgram
      * Transcribe audio file using Deepgram API
      *
      * @throws DeepgramConfigurationException
-     * @throws FileNotFoundException
+     * @throws UnableToReadFile
      * @throws RequestException
      */
     public function transcribeFile(string $absoluteFilePath, string $mimeType = 'audio/wav'): array
@@ -32,19 +32,19 @@ final class Deepgram
         }
 
         if (! is_readable(filename: $absoluteFilePath)) {
-            throw new FileNotFoundException('Audio file not readable: '.$absoluteFilePath);
+            throw new UnableToReadFile('Audio file not readable: '.$absoluteFilePath);
         }
 
         $stream = fopen(filename: $absoluteFilePath, mode: 'rb');
 
         if ($stream === false) {
-            throw new FileNotFoundException('Failed to open audio file for reading: '.$absoluteFilePath);
+            throw new UnableToReadFile('Failed to open audio file for reading: '.$absoluteFilePath);
         }
 
         $queryParams = http_build_query([
             'model' => config('deepgram.default_model', 'nova-2'),
             'language' => config('deepgram.default_language', 'nl'),
-            'smart_format' => config('deepgram.transcription.smart_format', true) ? 'true' : 'false',
+            'smart_format' => (bool) config('deepgram.transcription.smart_format', true),
         ]);
 
         $response = Http::withHeaders([
