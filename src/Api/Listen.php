@@ -14,7 +14,7 @@ final class Listen
     /**
      * Transcribe audio file using Deepgram /v1/listen API
      *
-     * @param array<string, mixed> $options
+     * @param  array<string, mixed>  $options
      * @return array<string, mixed>
      *
      * @throws DeepgramConfigurationException
@@ -35,13 +35,13 @@ final class Listen
         }
 
         if (! is_readable(filename: $absoluteFilePath)) {
-            throw new UnableToReadFile('Audio file not readable: ' . $absoluteFilePath);
+            throw new UnableToReadFile('Audio file not readable: '.$absoluteFilePath);
         }
 
         $stream = fopen(filename: $absoluteFilePath, mode: 'rb');
 
         if ($stream === false) {
-            throw new UnableToReadFile('Failed to open audio file for reading: ' . $absoluteFilePath);
+            throw new UnableToReadFile('Failed to open audio file for reading: '.$absoluteFilePath);
         }
 
         // Merge config defaults with provided options
@@ -56,10 +56,10 @@ final class Listen
         $queryParams = http_build_query($transcriptionOptions);
 
         $response = Http::withHeaders([
-            'Authorization' => 'Token ' . $apiKey,
+            'Authorization' => 'Token '.$apiKey,
             'Content-Type' => $mimeType,
         ])->withBody(stream_get_contents($stream) ?: '', $mimeType)
-            ->post($baseUrl . '/listen?' . $queryParams);
+            ->post($baseUrl.'/listen?'.$queryParams);
 
         fclose($stream);
 
@@ -71,7 +71,7 @@ final class Listen
     /**
      * Convert boolean values to 'true'/'false' strings for Deepgram API compatibility
      *
-     * @param array<string, mixed> $options
+     * @param  array<string, mixed>  $options
      * @return array<string, mixed>
      */
     private function convertBooleansToStrings(array $options): array

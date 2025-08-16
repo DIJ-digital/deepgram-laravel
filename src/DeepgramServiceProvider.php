@@ -23,6 +23,6 @@ final class DeepgramServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
-        $this->app->singleton(Deepgram::class, fn (): Deepgram => new Deepgram());
+        $this->app->singleton(Deepgram::class, fn (): Deepgram => new Deepgram);
     }
 }
