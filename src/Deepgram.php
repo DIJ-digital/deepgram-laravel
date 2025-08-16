@@ -15,7 +15,7 @@ final class Deepgram
      */
     public function listen(): Listen
     {
-        return new Listen;
+        return new Listen();
     }
 
     /**
@@ -23,7 +23,7 @@ final class Deepgram
      */
     public function speak(): Speak
     {
-        return new Speak;
+        return new Speak();
     }
 
     /**
@@ -31,6 +31,6 @@ final class Deepgram
      */
     public function read(): Read
     {
-        return new Read;
+        return new Read();
     }
 }
