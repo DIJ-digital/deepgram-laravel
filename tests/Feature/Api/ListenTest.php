@@ -112,15 +112,15 @@ describe('Listen API', function (): void {
                     ->and($result['results']['channels'][0]['alternatives'][0]['transcript'])
                     ->toBe('Custom transcription with diarization.');
 
-                // Verify custom options were sent in query string
+                // Verify custom options were sent in query string with proper boolean conversion
                 Http::assertSent(function ($request): bool {
                     $url = $request->url();
 
                     return str_contains($url, 'model=nova-3')
                         && str_contains($url, 'language=en')
-                        && str_contains($url, 'smart_format=1')
-                        && str_contains($url, 'punctuate=1')
-                        && str_contains($url, 'diarize=1');
+                        && str_contains($url, 'smart_format=true')
+                        && str_contains($url, 'punctuate=true')
+                        && str_contains($url, 'diarize=true');
                 });
             });
 
@@ -240,13 +240,48 @@ describe('Listen API', function (): void {
                 // ASSERT
                 expect($result)->toBeArray();
 
-                // Verify that config defaults are kept and options are merged
+                // Verify that config defaults are kept and options are merged with proper boolean conversion
                 Http::assertSent(function ($request): bool {
                     $url = $request->url();
 
                     return str_contains($url, 'model=nova-2') // from config
                         && str_contains($url, 'language=en') // from options
-                        && str_contains($url, 'punctuate=1'); // from options
+                        && str_contains($url, 'punctuate=true'); // from options (boolean converted to string)
+                });
+            });
+
+            it('converts boolean values to string true/false for Deepgram API', function (): void {
+                // ARRANGE
+                Storage::put('boolean-test.wav', 'fake-audio-content');
+                $audioFile = Storage::path('boolean-test.wav');
+
+                Http::fake([
+                    'api.deepgram.com/v1/listen*' => Http::response([
+                        'metadata' => ['duration' => 1.0],
+                        'results' => ['channels' => [['alternatives' => [['transcript' => 'Test', 'confidence' => 0.95]]]]],
+                    ], 200),
+                ]);
+
+                // ACT - Test both true and false boolean values
+                $result = Deepgram::listen()->transcribeFile($audioFile, 'audio/wav', [
+                    'smart_format' => true,
+                    'punctuate' => false,
+                    'diarize' => true,
+                ]);
+
+                // ASSERT
+                expect($result)->toBeArray();
+
+                // Verify boolean values are converted to 'true'/'false' strings, not '1'/'0'
+                Http::assertSent(function ($request): bool {
+                    $url = $request->url();
+
+                    return str_contains($url, 'smart_format=true')
+                        && str_contains($url, 'punctuate=false')
+                        && str_contains($url, 'diarize=true')
+                        && ! str_contains($url, 'smart_format=1')
+                        && ! str_contains($url, 'punctuate=0')
+                        && ! str_contains($url, 'diarize=1');
                 });
             });
         });

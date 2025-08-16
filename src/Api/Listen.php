@@ -49,6 +49,15 @@ final class Listen
             'language' => config('deepgram-laravel.default_language', 'en-US'),
         ], $options);
 
+        // Convert boolean values to string 'true'/'false' for Deepgram API
+        $transcriptionOptions = array_map(function ($value) {
+            if (is_bool($value)) {
+                return $value ? 'true' : 'false';
+            }
+
+            return $value;
+        }, $transcriptionOptions);
+
         $queryParams = http_build_query($transcriptionOptions);
 
         $response = Http::withHeaders([
