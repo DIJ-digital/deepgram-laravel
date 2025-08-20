@@ -124,4 +124,61 @@ describe('Read API', function (): void {
             });
         });
     });
+
+    describe('summarizeUrl', function (): void {
+        describe('success cases', function (): void {
+            it('can summarize text from URL with default options', function (): void {
+                // ARRANGE
+                $textUrl = 'https://example.com/sample.txt';
+
+                Http::fake([
+                    'api.deepgram.com/v1/read*' => Http::response([
+                        'metadata' => [
+                            'request_id' => '67890',
+                            'created' => '2024-01-01T10:00:00.000Z',
+                            'language' => 'en',
+                            'summary_info' => [
+                                'model_uuid' => 'def456',
+                                'input_tokens' => 50,
+                                'output_tokens' => 20,
+                            ],
+                        ],
+                        'results' => [
+                            'summary' => [
+                                'text' => 'This is a summary from the URL content.',
+                            ],
+                        ],
+                    ], 200),
+                ]);
+
+                // ACT
+                $result = Deepgram::read()->summarizeUrl($textUrl);
+
+                // ASSERT
+                expect($result)->toBeArray()
+                    ->and($result['results']['summary']['text'])
+                    ->toBe('This is a summary from the URL content.')
+                    ->and($result['metadata']['summary_info']['input_tokens'])
+                    ->toBe(50);
+
+                // Verify HTTP request was made correctly
+                Http::assertSent(fn ($request): bool => $request->url() === 'https://api.deepgram.com/v1/read?summarize=true&language=en'
+                    && $request->header('Authorization')[0] === 'Token test-api-key'
+                    && $request->header('Content-Type')[0] === 'application/json'
+                    && $request->data() === ['url' => $textUrl]
+                );
+            });
+        });
+
+        describe('error handling', function (): void {
+            it('throws configuration exception when api key is missing', function (): void {
+                // ARRANGE
+                config(['deepgram-laravel.api_key' => '']);
+
+                // ACT & ASSERT
+                expect(fn () => Deepgram::read()->summarizeUrl('https://example.com/test.txt'))
+                    ->toThrow(DeepgramConfigurationException::class, 'Deepgram API key is not properly configured');
+            });
+        });
+    });
 });

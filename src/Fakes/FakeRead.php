@@ -12,6 +12,23 @@ class FakeRead
      */
     public function summarizeText(string $text, array $options = []): array
     {
+        return $this->generateFakeResponse();
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
+     */
+    public function summarizeUrl(string $url, array $options = []): array
+    {
+        return $this->generateFakeResponse();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function generateFakeResponse(): array
+    {
         return [
             'metadata' => [
                 'request_id' => 'fake-request-' . uniqid(),
@@ -19,13 +36,13 @@ class FakeRead
                 'language' => 'en',
                 'summary_info' => [
                     'model_uuid' => 'fake-model-' . uniqid(),
-                    'input_tokens' => str_word_count($text),
+                    'input_tokens' => 100,
                     'output_tokens' => 25,
                 ],
             ],
             'results' => [
                 'summary' => [
-                    'text' => 'This is a fake summary of the provided text content.',
+                    'text' => 'This is a fake summary of the provided content.',
                 ],
             ],
         ];
