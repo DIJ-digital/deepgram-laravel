@@ -4,7 +4,49 @@ declare(strict_types=1);
 
 namespace DIJ\Deepgram\Api;
 
+use DIJ\Deepgram\Exceptions\DeepgramConfigurationException;
+use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Facades\Http;
+
 class Read
 {
-    // TODO: Implement Deepgram /v1/read API endpoints
+    /**
+     * Summarize text using Deepgram /v1/read API
+     *
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
+     *
+     * @throws DeepgramConfigurationException
+     * @throws RequestException
+     */
+    public function summarizeText(string $text, array $options = []): array
+    {
+        $apiKey = config('deepgram-laravel.api_key');
+        $baseUrl = mb_rtrim((string) config('deepgram-laravel.base_url'), '/');
+
+        if ($apiKey === null || $apiKey === '') {
+            throw new DeepgramConfigurationException('Deepgram API key is not properly configured');
+        }
+
+        if ($baseUrl === '') {
+            throw new DeepgramConfigurationException('Deepgram base URL is not properly configured');
+        }
+
+        // Set required parameters for summarization
+        $queryParams = array_merge([
+            'summarize' => 'true',
+            'language' => 'en',
+        ], $options);
+
+        $queryString = http_build_query($queryParams);
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Token ' . $apiKey,
+            'Content-Type' => 'application/json',
+        ])->post($baseUrl . '/read?' . $queryString, [
+            'text' => $text,
+        ]);
+
+        return $response->throw()->json();
+    }
 }
