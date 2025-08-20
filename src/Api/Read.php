@@ -21,6 +21,32 @@ class Read
      */
     public function summarizeText(string $text, array $options = []): array
     {
+        return $this->summarize(['text' => $text], $options);
+    }
+
+    /**
+     * Summarize text from URL using Deepgram /v1/read API
+     *
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
+     *
+     * @throws DeepgramConfigurationException
+     * @throws RequestException
+     */
+    public function summarizeUrl(string $url, array $options = []): array
+    {
+        return $this->summarize(['url' => $url], $options);
+    }
+
+    /* -------------------- Helper methods -------------------- */
+
+    /**
+     * @param array<string, mixed> $payload
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
+     */
+    private function summarize(array $payload, array $options = []): array
+    {
         $apiKey = config('deepgram-laravel.api_key');
         $baseUrl = mb_rtrim((string) config('deepgram-laravel.base_url'), '/');
 
@@ -43,9 +69,7 @@ class Read
         $response = Http::withHeaders([
             'Authorization' => 'Token ' . $apiKey,
             'Content-Type' => 'application/json',
-        ])->post($baseUrl . '/read?' . $queryString, [
-            'text' => $text,
-        ]);
+        ])->post($baseUrl . '/read?' . $queryString, $payload);
 
         return $response->throw()->json();
     }
