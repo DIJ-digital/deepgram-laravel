@@ -51,6 +51,7 @@ Deepgram::listen()->transcribeFile(absoluteFilePath: '/path/to/audio.wav', mimeT
 Text summarization and intelligence
 ```php
 Deepgram::read()->summarizeText(text: 'Your text content to summarize...', options: [])
+Deepgram::read()->summarizeUrl(url: 'https://example.com/article.txt', options: [])
 ```
 
 ### Speak
