@@ -7,6 +7,7 @@ namespace DIJ\Deepgram\Api;
 use DIJ\Deepgram\Exceptions\DeepgramConfigurationException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
+use InvalidArgumentException;
 use League\Flysystem\UnableToReadFile;
 
 class Listen
@@ -62,6 +63,54 @@ class Listen
             ->post($baseUrl . '/listen?' . $queryParams);
 
         fclose($stream);
+
+        return $response->throw()->json();
+    }
+
+    /**
+     * Transcribe remote audio file via URL using Deepgram /v1/listen API
+     *
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
+     *
+     * @throws DeepgramConfigurationException
+     * @throws InvalidArgumentException
+     * @throws RequestException
+     */
+    public function transcribeUrl(string $url, array $options = []): array
+    {
+        $apiKey = config('deepgram-laravel.api_key');
+        $baseUrl = mb_rtrim((string) config('deepgram-laravel.base_url'), '/');
+
+        if ($apiKey === null || $apiKey === '') {
+            throw new DeepgramConfigurationException('Deepgram API key is not properly configured');
+        }
+
+        if ($baseUrl === '') {
+            throw new DeepgramConfigurationException('Deepgram base URL is not properly configured');
+        }
+
+        if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+            throw new InvalidArgumentException('Invalid audio URL format: ' . $url);
+        }
+
+        // Merge config defaults with provided options
+        $transcriptionOptions = array_merge([
+            'model' => config('deepgram-laravel.default_model', 'nova-2'),
+            'language' => config('deepgram-laravel.default_language', 'en-US'),
+        ], $options);
+
+        // Convert boolean values to string 'true'/'false' for Deepgram API
+        $transcriptionOptions = $this->convertBooleansToStrings($transcriptionOptions);
+
+        $queryParams = http_build_query($transcriptionOptions);
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Token ' . $apiKey,
+        ])->post(
+                $baseUrl . '/listen?' . $queryParams,
+                ['url' => $url]
+            );
 
         return $response->throw()->json();
     }
