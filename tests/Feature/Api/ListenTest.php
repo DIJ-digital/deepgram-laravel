@@ -335,7 +335,7 @@ describe('Listen API', function (): void {
                 // Verify HTTP request was made correctly
                 Http::assertSent(function ($request) use ($url): bool {
                     $requestUrl = $request->url();
-                    $body = json_decode($request->body(), true);
+                    $body = json_decode((string) $request->body(), true);
 
                     return str_contains($requestUrl, 'https://api.deepgram.com/v1/listen')
                         && str_contains($requestUrl, 'model=nova-2')
@@ -388,7 +388,7 @@ describe('Listen API', function (): void {
                 // Verify custom options were sent in query string with proper boolean conversion
                 Http::assertSent(function ($request) use ($url): bool {
                     $requestUrl = $request->url();
-                    $body = json_decode($request->body(), true);
+                    $body = json_decode((string) $request->body(), true);
 
                     return str_contains($requestUrl, 'model=nova-3')
                         && str_contains($requestUrl, 'language=en')
@@ -430,7 +430,7 @@ describe('Listen API', function (): void {
 
                 // Verify correct Content-Type header and URL in body
                 Http::assertSent(function ($request) use ($url): bool {
-                    $body = json_decode($request->body(), true);
+                    $body = json_decode((string) $request->body(), true);
 
                     return $request->header('Content-Type')[0] === 'application/json'
                         && isset($body['url'])
@@ -530,9 +530,9 @@ describe('Listen API', function (): void {
                 Http::assertSent(function ($request): bool {
                     $url = $request->url();
 
-                    return str_contains($url, 'model=nova-2') // from config
-                        && str_contains($url, 'language=en') // from options
-                        && str_contains($url, 'punctuate=true'); // from options (boolean converted to string)
+                    return str_contains((string) $url, 'model=nova-2') // from config
+                        && str_contains((string) $url, 'language=en') // from options
+                        && str_contains((string) $url, 'punctuate=true'); // from options (boolean converted to string)
                 });
             });
 
@@ -561,12 +561,12 @@ describe('Listen API', function (): void {
                 Http::assertSent(function ($request): bool {
                     $url = $request->url();
 
-                    return str_contains($url, 'smart_format=true')
-                        && str_contains($url, 'punctuate=false')
-                        && str_contains($url, 'diarize=true')
-                        && ! str_contains($url, 'smart_format=1')
-                        && ! str_contains($url, 'punctuate=0')
-                        && ! str_contains($url, 'diarize=1');
+                    return str_contains((string) $url, 'smart_format=true')
+                        && str_contains((string) $url, 'punctuate=false')
+                        && str_contains((string) $url, 'diarize=true')
+                        && ! str_contains((string) $url, 'smart_format=1')
+                        && ! str_contains((string) $url, 'punctuate=0')
+                        && ! str_contains((string) $url, 'diarize=1');
                 });
             });
         });

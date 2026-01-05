@@ -107,9 +107,10 @@ class Listen
 
         $response = Http::withHeaders([
             'Authorization' => 'Token ' . $apiKey,
-            'Content-Type' => 'application/json',
-        ])->withBody(json_encode(['url' => $url]), 'application/json')
-            ->post($baseUrl . '/listen?' . $queryParams);
+        ])->post(
+                $baseUrl . '/listen?' . $queryParams,
+                ['url' => $url]
+            );
 
         return $response->throw()->json();
     }
