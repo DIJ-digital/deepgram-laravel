@@ -57,4 +57,34 @@ describe('Fake Deepgram', function (): void {
         expect($result['results']['channels'][0]['alternatives'][0]['transcript'])
             ->toBe('Custom mocked result');
     });
+
+    it('can fake read API for text summarization', function (): void {
+        // Arrange
+        Deepgram::fake();
+
+        // Act - No real HTTP calls will be made
+        $result = Deepgram::read()->summarizeText('This is a long text that needs to be summarized for testing purposes.');
+
+        // Assert - Returns fake summary data
+        expect($result)->toBeArray()
+            ->toHaveKey('metadata')
+            ->toHaveKey('results')
+            ->and($result['results']['summary']['text'])
+            ->toBe('This is a fake summary of the provided content.');
+    });
+
+    it('can fake read API for URL summarization', function (): void {
+        // Arrange
+        Deepgram::fake();
+
+        // Act - No real HTTP calls will be made
+        $result = Deepgram::read()->summarizeUrl('https://example.com/long-article.txt');
+
+        // Assert - Returns fake summary data
+        expect($result)->toBeArray()
+            ->toHaveKey('metadata')
+            ->toHaveKey('results')
+            ->and($result['results']['summary']['text'])
+            ->toBe('This is a fake summary of the provided content.');
+    });
 });
